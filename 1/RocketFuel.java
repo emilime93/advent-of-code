@@ -20,6 +20,14 @@ public class RocketFuel {
     return ((int) Math.floor(rocketMass / 3.0)) - 2;
   }
 
+  private static int fuelForFuel(int fuelWeight) {
+    int fuelMass = calculateFuelConsumption(fuelWeight);
+    if (fuelMass < 0) { // Base case
+      return 0;
+    }
+    return fuelMass + fuelForFuel(fuelMass);
+  }
+
   public static void main(String[] args) throws IOException {
     List<Integer> inputNumber = null;
     try {
@@ -31,8 +39,10 @@ public class RocketFuel {
     }
     int totalFuelConsumption = 0;
     for (Integer number : inputNumber) {
-      totalFuelConsumption += calculateFuelConsumption(number);
+      int requiredFuel = calculateFuelConsumption(number);
+      totalFuelConsumption += requiredFuel;
+      totalFuelConsumption += fuelForFuel(requiredFuel);
     }
-    System.out.printf("Total fuel consumption: %d\n", totalFuelConsumption);
+    System.out.printf("Total fuel consumption including mass for fuel: %d\n", totalFuelConsumption);
   }
 }
